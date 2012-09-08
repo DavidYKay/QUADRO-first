@@ -1,38 +1,38 @@
 /*
-gamepad.c - ardrone_tool custom code for AR.Drone autopilot agent.
+   gamepad.c - ardrone_tool custom code for AR.Drone autopilot agent.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Lesser General Public License as
+   published by the Free Software Foundation, either version 3 of the
+   License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
- You should have received a copy of the GNU Lesser General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- You should also have received a copy of the Parrot Parrot AR.Drone
- Development License and Parrot AR.Drone copyright notice and disclaimer
- and If not, see
+   You should have received a copy of the GNU Lesser General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   You should also have received a copy of the Parrot Parrot AR.Drone
+   Development License and Parrot AR.Drone copyright notice and disclaimer
+   and If not, see
    <https://projects.ardrone.org/attachments/277/ParrotLicense.txt>
- and
+   and
    <https://projects.ardrone.org/attachments/278/ParrotCopyrightAndDisclaimer.txt>.
 
 History:
 
-  04-JUN-2007: version 1.0 Created by Sylvain Gaeremynck <sylvain.gaeremynck@parrot.fr>.
+04-JUN-2007: version 1.0 Created by Sylvain Gaeremynck <sylvain.gaeremynck@parrot.fr>.
 
-  24-OCT-2010 Simon D. Levy: Removed non-gamepad (non-Logitech) code.
-                             Incorporated gamepad.h.
+24-OCT-2010 Simon D. Levy: Removed non-gamepad (non-Logitech) code.
+Incorporated gamepad.h.
 
-  26-OCT-2010 Simon D. Levy: Replaced deprecated ardrone_tool_set_ui_pad_* navigation calls
-                             with ardrone_at_set_progress_cmd.
+26-OCT-2010 Simon D. Levy: Replaced deprecated ardrone_tool_set_ui_pad_* navigation calls
+with ardrone_at_set_progress_cmd.
 
-  24-NOV-2010 Simon D. Levy: Added auto-pilot toggling.
+24-NOV-2010 Simon D. Levy: Added auto-pilot toggling.
 
-  03-AUG-2011 Simon D. Levy: Fixed missing return value in update_gamepad.
+03-AUG-2011 Simon D. Levy: Fixed missing return value in update_gamepad.
 */
 
 #define GAMEPAD_PS3_BLUETOOTH
@@ -47,96 +47,96 @@ History:
 
 #if 0
 typedef enum {
-  PS3_BUTTON_TRIANGLE = 12,
-  PS3_BUTTON_SQUARE   = 19,
-  PS3_BUTTON_CIRCLE   = 13,
-  PS3_BUTTON_X        = 14,
+    PS3_BUTTON_TRIANGLE = 12,
+    PS3_BUTTON_SQUARE   = 19,
+    PS3_BUTTON_CIRCLE   = 13,
+    PS3_BUTTON_X        = 14,
 
-  PS3_BUTTON_L1       = 10,
-  PS3_BUTTON_L2       = 8,
-  PS3_BUTTON_L3       = 1,
+    PS3_BUTTON_L1       = 10,
+    PS3_BUTTON_L2       = 8,
+    PS3_BUTTON_L3       = 1,
 
-  PS3_BUTTON_R1       = 11,
-  PS3_BUTTON_R2       = 9,
-  PS3_BUTTON_R3       = 2,
+    PS3_BUTTON_R1       = 11,
+    PS3_BUTTON_R2       = 9,
+    PS3_BUTTON_R3       = 2,
 
-  PS3_BUTTON_SELECT   = 8,
-  PS3_BUTTON_START    = 9,
+    PS3_BUTTON_SELECT   = 8,
+    PS3_BUTTON_START    = 9,
 } PS3_BLUETOOTH_BUTTONS;
 #else
 
 typedef enum {
-  PS3_AXIS_TRIANGLE         = 16,
-  PS3_AXIS_SQUARE           = 15,
-  PS3_AXIS_CIRCLE           = 17,
-  PS3_AXIS_X                = 18,
+    PS3_AXIS_TRIANGLE         = 16,
+    PS3_AXIS_SQUARE           = 15,
+    PS3_AXIS_CIRCLE           = 17,
+    PS3_AXIS_X                = 18,
 
-  PS3_AXIS_L1               = 14,
-  PS3_AXIS_L2               = 12,
+    PS3_AXIS_L1               = 14,
+    PS3_AXIS_L2               = 12,
 
-  PS3_AXIS_R1               = 15,
-  PS3_AXIS_R2               = 13,
+    PS3_AXIS_R1               = 15,
+    PS3_AXIS_R2               = 13,
 
-  PS3_AXIS_LEFT_HORIZONTAL  = 0,
-  PS3_AXIS_LEFT_VERTICAL    = 1,
+    PS3_AXIS_LEFT_HORIZONTAL  = 0,
+    PS3_AXIS_LEFT_VERTICAL    = 1,
 
-  PS3_AXIS_RIGHT_HORIZONTAL = 2,
-  PS3_AXIS_RIGHT_VERTICAL   = 3,
+    PS3_AXIS_RIGHT_HORIZONTAL = 2,
+    PS3_AXIS_RIGHT_VERTICAL   = 3,
 
-  PS3_AXIS_CONTROLLER       = 6,
+    PS3_AXIS_CONTROLLER       = 6,
 
 } PS3_BLUETOOTH_AXES;
 
 typedef enum {
-  PS3_BUTTON_TRIANGLE = 12,
-  PS3_BUTTON_SQUARE   = 19,
-  PS3_BUTTON_CIRCLE   = 13,
-  PS3_BUTTON_X        = 14,
+    PS3_BUTTON_TRIANGLE = 12,
+    PS3_BUTTON_SQUARE   = 19,
+    PS3_BUTTON_CIRCLE   = 13,
+    PS3_BUTTON_X        = 14,
 
-  PS3_BUTTON_L1       = 10,
-  PS3_BUTTON_L2       = 8,
-  PS3_BUTTON_L3       = 1,
+    PS3_BUTTON_L1       = 10,
+    PS3_BUTTON_L2       = 8,
+    PS3_BUTTON_L3       = 1,
 
-  PS3_BUTTON_R1       = 11,
-  PS3_BUTTON_R2       = 9,
-  PS3_BUTTON_R3       = 2,
+    PS3_BUTTON_R1       = 11,
+    PS3_BUTTON_R2       = 9,
+    PS3_BUTTON_R3       = 2,
 
-  PS3_BUTTON_SELECT   = 0,
-  PS3_BUTTON_START    = 3,
+    PS3_BUTTON_SELECT   = 0,
+    PS3_BUTTON_START    = 3,
 } PS3_BLUETOOTH_BUTTONS;
 
 #endif
 
 typedef enum {
 #if 0
-  AXIS_PHI = 0, // Roll
-  AXIS_THETA,   // Pitch
-  AXIS_YAW,     // Yaw
-  AXIS_GAZ,     // Altitude
-  AXIS_IGNORE3,
-  AXIS_IGNORE4,
+    AXIS_PHI = 0, // Roll
+    AXIS_THETA,   // Pitch
+    AXIS_YAW,     // Yaw
+    AXIS_GAZ,     // Altitude
+    AXIS_IGNORE3,
+    AXIS_IGNORE4,
 #else
-  AXIS_PHI   = PS3_AXIS_LEFT_HORIZONTAL, // Roll
-  AXIS_THETA = PS3_AXIS_LEFT_VERTICAL,   // Pitch
-  AXIS_YAW   = PS3_AXIS_RIGHT_HORIZONTAL,     // Yaw
-  AXIS_GAZ   = PS3_AXIS_RIGHT_VERTICAL,     // Altitude
-  AXIS_IGNORE3,
-  AXIS_IGNORE4,
-  AXIS_IGNORE5 = PS3_AXIS_CONTROLLER,
+    AXIS_PHI   = PS3_AXIS_LEFT_HORIZONTAL, // Roll
+    AXIS_THETA = PS3_AXIS_LEFT_VERTICAL,   // Pitch
+    AXIS_YAW   = PS3_AXIS_RIGHT_HORIZONTAL,     // Yaw
+    AXIS_GAZ   = PS3_AXIS_RIGHT_VERTICAL,     // Altitude
+    AXIS_IGNORE3,
+    AXIS_IGNORE4,
+    AXIS_IGNORE5 = PS3_AXIS_CONTROLLER,
 #endif
 } PAD_AXIS;
 
 typedef enum {
 #if 0
-  BUTTON_EMERGENCY = 8,
-  BUTTON_TAKEOFF  = 9,
-  BUTTON_ZAP    = 0,
-  BUTTON_AUTO   = 1
+    BUTTON_EMERGENCY = 8,
+    BUTTON_TAKEOFF  = 9,
+    BUTTON_ZAP    = 0,
+    BUTTON_AUTO   = 1
 #else
-  BUTTON_EMERGENCY = PS3_BUTTON_SELECT,
-  BUTTON_TAKEOFF   = PS3_BUTTON_START,
-  BUTTON_ZAP       = PS3_BUTTON_R1,
-  BUTTON_AUTO      = PS3_BUTTON_TRIANGLE,
+        BUTTON_EMERGENCY = PS3_BUTTON_SELECT,
+    BUTTON_TAKEOFF   = PS3_BUTTON_START,
+    BUTTON_ZAP       = PS3_BUTTON_R1,
+    BUTTON_AUTO      = PS3_BUTTON_TRIANGLE,
 #endif
 } PAD_BUTTONS;
 
@@ -145,19 +145,19 @@ typedef enum {
 #define GAMEPAD_ID GAMEPAD_LOGITECH_ID
 
 typedef enum {
-  AXIS_PHI = 0,
-  AXIS_THETA,
-  AXIS_YAW,
-  AXIS_IGNORE3,
-  AXIS_IGNORE4,
-  AXIS_GAZ
+    AXIS_PHI = 0,
+    AXIS_THETA,
+    AXIS_YAW,
+    AXIS_IGNORE3,
+    AXIS_IGNORE4,
+    AXIS_GAZ
 } PAD_AXIS;
 
 typedef enum {
-  BUTTON_TAKEOFF = 0,
-  BUTTON_EMERGENCY,
-  BUTTON_ZAP,
-  BUTTON_AUTO
+    BUTTON_TAKEOFF = 0,
+    BUTTON_EMERGENCY,
+    BUTTON_ZAP,
+    BUTTON_AUTO
 } PAD_BUTTONS;
 
 #endif
@@ -181,12 +181,12 @@ typedef enum {
 #include "agent.h"
 
 typedef struct {
-	int32_t bus;
-	int32_t vendor;
-	int32_t product;
-	int32_t version;
-	char    name[MAX_NAME_LENGTH];
-	char    handlers[MAX_NAME_LENGTH];
+    int32_t bus;
+    int32_t vendor;
+    int32_t product;
+    int32_t version;
+    char    name[MAX_NAME_LENGTH];
+    char    handlers[MAX_NAME_LENGTH];
 } device_t;
 
 static C_RESULT parse_proc_input_devices(FILE* f, const int32_t id);
@@ -197,185 +197,185 @@ static int32_t joy_dev;
 
 C_RESULT open_gamepad(void) {
 
-	C_RESULT res = C_FAIL;
+    C_RESULT res = C_FAIL;
 
-	FILE* f = fopen("/proc/bus/input/devices", "r");
+    FILE* f = fopen("/proc/bus/input/devices", "r");
 
-	if( f != NULL ) {
+    if( f != NULL ) {
 
-		res = parse_proc_input_devices( f, GAMEPAD_ID);
+        res = parse_proc_input_devices( f, GAMEPAD_ID);
 
-		fclose( f );
+        fclose( f );
 
-		if( SUCCEED( res ) && strcmp(gamepad.name, "Gamepad")!=0) {
+        if( SUCCEED( res ) && strcmp(gamepad.name, "Gamepad")!=0) {
 
-			char dev_path[20]="/dev/input/";
-			strcat(dev_path, gamepad.name);
-			joy_dev = open(dev_path, O_NONBLOCK | O_RDONLY);
-		}
-		else {
+            char dev_path[20]="/dev/input/";
+            strcat(dev_path, gamepad.name);
+            joy_dev = open(dev_path, O_NONBLOCK | O_RDONLY);
+        }
+        else {
 
-			return C_FAIL;
-		}
-	}
+            return C_FAIL;
+        }
+    }
 
-	return res;
+    return res;
 }
 
 C_RESULT update_gamepad(void) {
 
-	static int32_t start;
-        static float phi, theta, gaz, yaw;
+    static int32_t start;
+    static float phi, theta, gaz, yaw;
 
-	struct js_event js_e_buffer[64];
-	ssize_t res = read(joy_dev, js_e_buffer, sizeof(struct js_event) * 64);
+    struct js_event js_e_buffer[64];
+    ssize_t res = read(joy_dev, js_e_buffer, sizeof(struct js_event) * 64);
 
-	if( !res || (res < 0 && errno == EAGAIN) )
-		return C_OK;
+    if( !res || (res < 0 && errno == EAGAIN) )
+        return C_OK;
 
-	if( res < 0 )
-		return C_FAIL;
+    if( res < 0 )
+        return C_FAIL;
 
-	if (res < (int) sizeof(struct js_event))// If non-complete bloc: ignored
-		return C_OK;
+    if (res < (int) sizeof(struct js_event))// If non-complete bloc: ignored
+        return C_OK;
 
-	// Buffer decomposition in blocs (if the last is incomplete, it's ignored)
-	bool_t refresh_values = FALSE;
-	bool_t enable = FALSE;
-	int32_t idx = 0;
-	for (idx = 0; idx < res / sizeof(struct js_event); idx++) {
+    // Buffer decomposition in blocs (if the last is incomplete, it's ignored)
+    bool_t refresh_values = FALSE;
+    bool_t enable = FALSE;
+    int32_t idx = 0;
+    for (idx = 0; idx < res / sizeof(struct js_event); idx++) {
 
-		unsigned char type = js_e_buffer[idx].type;
-		unsigned char number = js_e_buffer[idx].number;
-		short value = js_e_buffer[idx].value;
-
-
-		if (type & JS_EVENT_INIT ) {
-
-			break;
-		}
-		else if (!value) {
-
-			break;
-		}
-		else if (type & JS_EVENT_BUTTON ) {
-                    printf("Button was pressed: %d \n", number);
-
-			switch(number) {
-				case BUTTON_TAKEOFF :
-                                        printf("Takeoff/land \n");
-					start ^= 1;
-					ardrone_tool_set_ui_pad_start( start );
-					g_autopilot = FALSE;
-					break;
-				case BUTTON_EMERGENCY :
-                                        printf("EMERGENCY button \n");
-					ardrone_tool_set_ui_pad_select(js_e_buffer[idx].value);
-					g_exit = TRUE;
-					return C_OK;
-				case BUTTON_ZAP:
-                                        printf("ZAP!\n");
-					agent_zap();
-					break;
-				case BUTTON_AUTO:
-					if (g_autopilot) {
-                                                printf("Disable autopilot!\n");
-						refresh_values = TRUE;
-					}
-					else {
-                                                printf("Enable autopilot!\n");
-						g_autopilot = TRUE;
-					}
-					break;
-			}
-
-		}
-		else if (type & JS_EVENT_AXIS ) {
-
-			if (number != AXIS_IGNORE3 && number != AXIS_IGNORE4 && number != AXIS_IGNORE5) {
-				refresh_values = TRUE;
-				enable = TRUE;
-				float angle = value / (float)SHRT_MAX;
-                                //printf("Axis was adjusted: %d, %f \n", number, angle);
-				switch (number) {
-					case AXIS_PHI:
-                                                printf("Roll/Phi was adjusted to: %f \n", phi);
-						phi = angle;
-						break;
-					case AXIS_THETA:
-                                                printf("Pitch/Theta was adjusted to: %f \n", theta);
-                                                #ifdef GAMEPAD_PS3_BLUETOOTH
-                                                // Flip for BT PS3
-                                                //theta = -1 * angle;
-                                                theta = angle;
-                                                #else
-                                                theta = angle;
-                                                #endif
-						break;
-					case AXIS_GAZ:
-                                                printf("Altitude/Gaz was adjusted to: %f \n", gaz);
-                                                #ifdef GAMEPAD_PS3_BLUETOOTH
-                                                // Flip for BT PS3
-                                                gaz = -1 * angle;
-                                                #else
-                                                gaz = angle;
-                                                #endif
-						break;
-					case AXIS_YAW:
-                                                printf("Yaw was adjusted to: %f \n", yaw);
-						yaw = angle;
-						break;
-				}
-			}
-		}
-
-	} // loop over events
+        unsigned char type = js_e_buffer[idx].type;
+        unsigned char number = js_e_buffer[idx].number;
+        short value = js_e_buffer[idx].value;
 
 
-	if (refresh_values) {
+        if (type & JS_EVENT_INIT ) {
 
-		g_autopilot = FALSE;
-		//ardrone_at_set_progress_cmd(enable, phi, theta, gaz, yaw);
-		ardrone_tool_set_progressive_cmd(enable, phi, theta, gaz, yaw, 0.0, 0.0);
-	}
+            break;
+        }
+        else if (!value) {
 
-	return C_OK;
+            break;
+        }
+        else if (type & JS_EVENT_BUTTON ) {
+            printf("Button was pressed: %d \n", number);
+
+            switch(number) {
+                case BUTTON_TAKEOFF :
+                    printf("Takeoff/land \n");
+                    start ^= 1;
+                    ardrone_tool_set_ui_pad_start( start );
+                    g_autopilot = FALSE;
+                    break;
+                case BUTTON_EMERGENCY :
+                    printf("EMERGENCY button \n");
+                    ardrone_tool_set_ui_pad_select(js_e_buffer[idx].value);
+                    g_exit = TRUE;
+                    return C_OK;
+                case BUTTON_ZAP:
+                    printf("ZAP!\n");
+                    agent_zap();
+                    break;
+                case BUTTON_AUTO:
+                    if (g_autopilot) {
+                        printf("Disable autopilot!\n");
+                        refresh_values = TRUE;
+                    }
+                    else {
+                        printf("Enable autopilot!\n");
+                        g_autopilot = TRUE;
+                    }
+                    break;
+            }
+
+        }
+        else if (type & JS_EVENT_AXIS ) {
+
+            if (number != AXIS_IGNORE3 && number != AXIS_IGNORE4 && number != AXIS_IGNORE5) {
+                refresh_values = TRUE;
+                enable = TRUE;
+                float angle = value / (float)SHRT_MAX;
+                //printf("Axis was adjusted: %d, %f \n", number, angle);
+                switch (number) {
+                    case AXIS_PHI:
+                        printf("Roll/Phi was adjusted to: %f \n", phi);
+                        phi = angle;
+                        break;
+                    case AXIS_THETA:
+                        printf("Pitch/Theta was adjusted to: %f \n", theta);
+#ifdef GAMEPAD_PS3_BLUETOOTH
+                        // Flip for BT PS3
+                        //theta = -1 * angle;
+                        theta = angle;
+#else
+                        theta = angle;
+#endif
+                        break;
+                    case AXIS_GAZ:
+                        printf("Altitude/Gaz was adjusted to: %f \n", gaz);
+#ifdef GAMEPAD_PS3_BLUETOOTH
+                        // Flip for BT PS3
+                        gaz = -1 * angle;
+#else
+                        gaz = angle;
+#endif
+                        break;
+                    case AXIS_YAW:
+                        printf("Yaw was adjusted to: %f \n", yaw);
+                        yaw = angle;
+                        break;
+                }
+            }
+        }
+
+    } // loop over events
+
+
+    if (refresh_values) {
+
+        g_autopilot = FALSE;
+        //ardrone_at_set_progress_cmd(enable, phi, theta, gaz, yaw);
+        ardrone_tool_set_progressive_cmd(enable, phi, theta, gaz, yaw, 0.0, 0.0);
+    }
+
+    return C_OK;
 }
 
 
 
 C_RESULT close_gamepad(void) {
 
-	close( joy_dev );
+    close( joy_dev );
 
-	return C_OK;
+    return C_OK;
 }
 
 input_device_t gamepad = {
-	"Gamepad",
-	open_gamepad,
-	update_gamepad,
-	close_gamepad
+    "Gamepad",
+    open_gamepad,
+    update_gamepad,
+    close_gamepad
 };
 
 // -------------------------------------------------------------------------------------------------------------------------------------
 
 static int32_t make_id(device_t* device)
 {
-	return ( (device->vendor << 16) & 0xffff0000) | (device->product & 0xffff);
+    return ( (device->vendor << 16) & 0xffff0000) | (device->product & 0xffff);
 }
 
 static C_RESULT add_device(device_t* device, const int32_t id_wanted)
 {
-	int32_t id = make_id(device);
-	if( id_wanted == GAMEPAD_ID && id == id_wanted)
-	{
-		PRINT("Input device %s found\n", device->name);
-		strncpy(gamepad.name, device->handlers, MAX_NAME_LENGTH);
-		return C_OK;
-	}
+    int32_t id = make_id(device);
+    if( id_wanted == GAMEPAD_ID && id == id_wanted)
+    {
+        PRINT("Input device %s found\n", device->name);
+        strncpy(gamepad.name, device->handlers, MAX_NAME_LENGTH);
+        return C_OK;
+    }
 
-	return C_FAIL;
+    return C_FAIL;
 }
 
 
@@ -387,24 +387,24 @@ static C_RESULT add_device(device_t* device, const int32_t id_wanted)
 #define KW_MAX_LEN 64
 
 typedef enum {
-	KW_BUS,
-	KW_VENDOR,
-	KW_PRODUCT,
-	KW_VERSION,
-	KW_NAME,
-	KW_HANDLERS,
-	KW_MAX
+    KW_BUS,
+    KW_VENDOR,
+    KW_PRODUCT,
+    KW_VERSION,
+    KW_NAME,
+    KW_HANDLERS,
+    KW_MAX
 } keyword_t;
 
 typedef enum {
-	INT,
-	STRING,
+    INT,
+    STRING,
 } value_type_t;
 
 typedef struct {
-	const char*   name;
-	value_type_t  value_type;
-	int32_t       value_offset;
+    const char*   name;
+    value_type_t  value_type;
+    int32_t       value_offset;
 } kw_tab_entry_t;
 
 static int current_c;
@@ -417,269 +417,269 @@ static const int quote = '\"';
 static const int eol = '\n';
 
 static kw_tab_entry_t kw_tab[] = {
-	[KW_BUS]      = {  "Bus",      INT,    offsetof(device_t, bus)       },
-	[KW_VENDOR]   = {  "Vendor",   INT,    offsetof(device_t, vendor)    },
-	[KW_PRODUCT]  = {  "Product",  INT,    offsetof(device_t, product)   },
-	[KW_VERSION]  = {  "Version",  INT,    offsetof(device_t, version)   },
-	[KW_NAME]     = {  "Name",     STRING, offsetof(device_t, name)      },
-	[KW_HANDLERS] = {  "Handlers", STRING, offsetof(device_t, handlers)  }
+    [KW_BUS]      = {  "Bus",      INT,    offsetof(device_t, bus)       },
+    [KW_VENDOR]   = {  "Vendor",   INT,    offsetof(device_t, vendor)    },
+    [KW_PRODUCT]  = {  "Product",  INT,    offsetof(device_t, product)   },
+    [KW_VERSION]  = {  "Version",  INT,    offsetof(device_t, version)   },
+    [KW_NAME]     = {  "Name",     STRING, offsetof(device_t, name)      },
+    [KW_HANDLERS] = {  "Handlers", STRING, offsetof(device_t, handlers)  }
 };
 
 static const char* handler_names[] = {
-	"js0",
-	"js1",
-	"js2",
-	"js3",
-	0
+    "js0",
+    "js1",
+    "js2",
+    "js3",
+    0
 };
 
 static bool_t is_separator(int c)
 {
-	int32_t i;
-	bool_t found = FALSE;
+    int32_t i;
+    bool_t found = FALSE;
 
-	for( i = 0; i < sizeof separators && !found; i++ )
-	{
-		found = ( c == separators[i] );
-	}
+    for( i = 0; i < sizeof separators && !found; i++ )
+    {
+        found = ( c == separators[i] );
+    }
 
-	return found;
+    return found;
 }
 
 static bool_t is_quote(int c)
 {
-	return c == quote;
+    return c == quote;
 }
 
 static bool_t is_eol(int c)
 {
-	return c == eol;
+    return c == eol;
 }
 
 static C_RESULT fetch_char(FILE* f)
 {
-	C_RESULT res = C_FAIL;
+    C_RESULT res = C_FAIL;
 
-	current_c = next_c;
+    current_c = next_c;
 
-	if( !feof(f) )
-	{
-		next_c = fgetc(f);
-		res = C_OK;
-	}
+    if( !feof(f) )
+    {
+        next_c = fgetc(f);
+        res = C_OK;
+    }
 
-	// PRINT("current_c = %c, next_c = %c\n", current_c, next_c );
+    // PRINT("current_c = %c, next_c = %c\n", current_c, next_c );
 
-	return res;
+    return res;
 }
 
 static C_RESULT parse_string(FILE* f, char* str, int32_t maxlen)
 {
-	int32_t i = 0;
-	bool_t is_quoted = is_quote(current_c);
+    int32_t i = 0;
+    bool_t is_quoted = is_quote(current_c);
 
-	if( is_quoted )
-	{
-		while( SUCCEED(fetch_char(f)) && ! ( is_separator(current_c) && is_quote(current_c) ) )  {
-			str[i] = current_c;
-			i++;
-		}
-	}
-	else
-	{
-		while( SUCCEED(fetch_char(f)) && !is_separator(current_c) )  {
-			str[i] = current_c;
-			i++;
-		}
-	}
+    if( is_quoted )
+    {
+        while( SUCCEED(fetch_char(f)) && ! ( is_separator(current_c) && is_quote(current_c) ) )  {
+            str[i] = current_c;
+            i++;
+        }
+    }
+    else
+    {
+        while( SUCCEED(fetch_char(f)) && !is_separator(current_c) )  {
+            str[i] = current_c;
+            i++;
+        }
+    }
 
-	str[i] = '\0';
-	// PRINT("parse_string: %s\n", str);
+    str[i] = '\0';
+    // PRINT("parse_string: %s\n", str);
 
-	return is_eol( current_c ) ? C_FAIL : C_OK;
+    return is_eol( current_c ) ? C_FAIL : C_OK;
 }
 
 static C_RESULT parse_int(FILE* f, int32_t* i)
 {
-	C_RESULT res = C_OK;
-	int value;
+    C_RESULT res = C_OK;
+    int value;
 
-	*i = 0;
+    *i = 0;
 
-	while( !is_separator(next_c) && SUCCEED(fetch_char(f)) && res == C_OK )  {
-		value = current_c - '0';
+    while( !is_separator(next_c) && SUCCEED(fetch_char(f)) && res == C_OK )  {
+        value = current_c - '0';
 
-		if (value > 9 || value < 0)
-		{
-			value = current_c - 'a' + 10;
-			res = (value > 0xF || value < 0xa) ? C_FAIL : C_OK;
-		}
+        if (value > 9 || value < 0)
+        {
+            value = current_c - 'a' + 10;
+            res = (value > 0xF || value < 0xa) ? C_FAIL : C_OK;
+        }
 
-		*i *= 16;
-		*i += value;
-	}
+        *i *= 16;
+        *i += value;
+    }
 
-	return res;
+    return res;
 }
 
 static C_RESULT skip_line(FILE* f)
 {
-	while( !is_eol(next_c) && SUCCEED(fetch_char(f)) );
+    while( !is_eol(next_c) && SUCCEED(fetch_char(f)) );
 
-	return C_OK;
+    return C_OK;
 }
 
 static C_RESULT match_keyword( const char* keyword, keyword_t* kw )
 {
-	int32_t i;
-	C_RESULT res = C_FAIL;
+    int32_t i;
+    C_RESULT res = C_FAIL;
 
-	for( i = 0; i < KW_MAX && res != C_OK; i++ )
-	{
-		res = ( strcmp( keyword, kw_tab[i].name ) == 0 ) ? C_OK : C_FAIL;
-	}
+    for( i = 0; i < KW_MAX && res != C_OK; i++ )
+    {
+        res = ( strcmp( keyword, kw_tab[i].name ) == 0 ) ? C_OK : C_FAIL;
+    }
 
-	*kw = i-1;
+    *kw = i-1;
 
-	return res;
+    return res;
 }
 
 static C_RESULT match_handler( void )
 {
-	int32_t i = 0;
-	bool_t found = FALSE;
+    int32_t i = 0;
+    bool_t found = FALSE;
 
-	while( !found && handler_names[i] != 0 )
-	{
-		found = strcmp( (char*)((char*)&current_device + kw_tab[KW_HANDLERS].value_offset), handler_names[i] ) == 0;
+    while( !found && handler_names[i] != 0 )
+    {
+        found = strcmp( (char*)((char*)&current_device + kw_tab[KW_HANDLERS].value_offset), handler_names[i] ) == 0;
 
-		i ++;
-	}
+        i ++;
+    }
 
-        if(found)
-        {
-                strcpy(current_device.handlers, handler_names[i-1]);
-        }
+    if(found)
+    {
+        strcpy(current_device.handlers, handler_names[i-1]);
+    }
 
-  return found ? C_OK : C_FAIL;
+    return found ? C_OK : C_FAIL;
 }
 
 static C_RESULT parse_keyword( FILE* f, keyword_t kw )
 {
-  C_RESULT res = C_OK;
+    C_RESULT res = C_OK;
 
-  while( is_separator(next_c) && SUCCEED(fetch_char(f)) );
+    while( is_separator(next_c) && SUCCEED(fetch_char(f)) );
 
-  switch( kw_tab[kw].value_type ) {
-    case INT:
-      parse_int( f, (int32_t*)((char*)&current_device + kw_tab[kw].value_offset) );
-      //PRINT("%s = %x\n", kw_tab[kw].name, *(int32_t*)((char*)&current_device + kw_tab[kw].value_offset) );
-      break;
+    switch( kw_tab[kw].value_type ) {
+        case INT:
+            parse_int( f, (int32_t*)((char*)&current_device + kw_tab[kw].value_offset) );
+            //PRINT("%s = %x\n", kw_tab[kw].name, *(int32_t*)((char*)&current_device + kw_tab[kw].value_offset) );
+            break;
 
-    case STRING:
-      parse_string( f, (char*)((char*)&current_device + kw_tab[kw].value_offset), KW_MAX_LEN );
-      //PRINT("%s = %s\n", kw_tab[kw].name, (char*)((char*)&current_device + kw_tab[kw].value_offset) );
-      break;
+        case STRING:
+            parse_string( f, (char*)((char*)&current_device + kw_tab[kw].value_offset), KW_MAX_LEN );
+            //PRINT("%s = %s\n", kw_tab[kw].name, (char*)((char*)&current_device + kw_tab[kw].value_offset) );
+            break;
 
-    default:
-      res = C_FAIL;
-      break;
-  }
+        default:
+            res = C_FAIL;
+            break;
+    }
 
-  return res;
+    return res;
 }
 
 static C_RESULT parse_I(FILE* f)
 {
-  char keyword[KW_MAX_LEN];
+    char keyword[KW_MAX_LEN];
 
-  while( SUCCEED(fetch_char(f)) && is_separator(next_c) );
+    while( SUCCEED(fetch_char(f)) && is_separator(next_c) );
 
-  while( !is_eol(next_c) ) {
-    keyword_t kw;
+    while( !is_eol(next_c) ) {
+        keyword_t kw;
 
-    parse_string( f, keyword, KW_MAX_LEN );
-    if( SUCCEED( match_keyword( keyword, &kw ) ) )
-    {
-      parse_keyword( f, kw );
+        parse_string( f, keyword, KW_MAX_LEN );
+        if( SUCCEED( match_keyword( keyword, &kw ) ) )
+        {
+            parse_keyword( f, kw );
+        }
     }
-  }
 
-  return C_OK;
+    return C_OK;
 }
 
 static C_RESULT parse_N(FILE* f)
 {
-  char keyword[KW_MAX_LEN];
+    char keyword[KW_MAX_LEN];
 
-  while( SUCCEED(fetch_char(f)) && is_separator(next_c) );
+    while( SUCCEED(fetch_char(f)) && is_separator(next_c) );
 
-  while( !is_eol(next_c) ) {
-    keyword_t kw;
+    while( !is_eol(next_c) ) {
+        keyword_t kw;
 
-    parse_string( f, keyword, KW_MAX_LEN );
-    if( SUCCEED( match_keyword( keyword, &kw ) ) )
-    {
-      parse_keyword( f, kw );
+        parse_string( f, keyword, KW_MAX_LEN );
+        if( SUCCEED( match_keyword( keyword, &kw ) ) )
+        {
+            parse_keyword( f, kw );
+        }
     }
-  }
 
 
-  return C_OK;
+    return C_OK;
 }
 
 static C_RESULT parse_H(FILE* f)
 {
-  C_RESULT res = C_FAIL;
-  char keyword[KW_MAX_LEN];
+    C_RESULT res = C_FAIL;
+    char keyword[KW_MAX_LEN];
 
-  while( SUCCEED(fetch_char(f)) && is_separator(next_c) );
+    while( SUCCEED(fetch_char(f)) && is_separator(next_c) );
 
-  while( !is_eol(next_c) ) {
-    parse_string( f, keyword, KW_MAX_LEN );
-    if( strcmp( keyword, kw_tab[KW_HANDLERS].name ) == 0 )
-    {
-      while( FAILED(res) && SUCCEED( parse_string(f,
-                                                  (char*)((char*)&current_device + kw_tab[KW_HANDLERS].value_offset),
-                                                  KW_MAX_LEN ) ) )
-      {
-        res = match_handler();
-      }
+    while( !is_eol(next_c) ) {
+        parse_string( f, keyword, KW_MAX_LEN );
+        if( strcmp( keyword, kw_tab[KW_HANDLERS].name ) == 0 )
+        {
+            while( FAILED(res) && SUCCEED( parse_string(f,
+                            (char*)((char*)&current_device + kw_tab[KW_HANDLERS].value_offset),
+                            KW_MAX_LEN ) ) )
+            {
+                res = match_handler();
+            }
+        }
     }
-  }
 
-  return res;
+    return res;
 }
 
 static C_RESULT end_device(const int32_t id)
 {
-  C_RESULT res = C_FAIL;
-  res=add_device(&current_device, id);
-  vp_os_memset( &current_device, 0, sizeof(device_t) );
+    C_RESULT res = C_FAIL;
+    res=add_device(&current_device, id);
+    vp_os_memset( &current_device, 0, sizeof(device_t) );
 
-  return res;
+    return res;
 }
 
 static C_RESULT parse_proc_input_devices(FILE* f, const int32_t id)
 {
-  C_RESULT res = C_FAIL;
+    C_RESULT res = C_FAIL;
 
-  next_c = '\0';
-  vp_os_memset( &current_device, 0, sizeof(device_t) );
+    next_c = '\0';
+    vp_os_memset( &current_device, 0, sizeof(device_t) );
 
-  while( res != C_OK && SUCCEED( fetch_char(f) ) )
-  {
-    switch( next_c )
+    while( res != C_OK && SUCCEED( fetch_char(f) ) )
     {
-      case 'I': parse_I(f); break;
-      case 'N': parse_N(f); break;
-      case 'H': if( SUCCEED( parse_H(f) ) ) res = end_device(id); break;
-      case 'P':
-      case 'S':
-      case 'B':
-      default: skip_line(f); break;
+        switch( next_c )
+        {
+            case 'I': parse_I(f); break;
+            case 'N': parse_N(f); break;
+            case 'H': if( SUCCEED( parse_H(f) ) ) res = end_device(id); break;
+            case 'P':
+            case 'S':
+            case 'B':
+            default: skip_line(f); break;
+        }
     }
-  }
 
-  return res;
+    return res;
 }
