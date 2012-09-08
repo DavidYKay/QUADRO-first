@@ -1,0 +1,5 @@
+*.o
+autopilot
+*.log
+*.pyc
+bak/
