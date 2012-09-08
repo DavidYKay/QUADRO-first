@@ -1,0 +1,47 @@
+0	[<s>]	sil
+1	[</s>]	sil
+2	[VIEW]	v y uw
+3	[UP]	ah p
+3	[DOWN]	d aw n
+3	[LEFT]	l eh f t
+3	[RIGHT]	r ay t
+3	[NEARER]	n ih r er
+3	[CLOSER]	k l ow s er
+3	[FURTHER]	f er dh er
+4	[RUN]	r ah n
+4	[RESET]	r iy s eh t
+4	[BORED]	b ao r d
+5	[BEGIN]	b ix g ih n
+6	[LET'S]	l eh t s
+7	[ARM]	aa r m
+7	[LEG]	l eh g
+7	[HEAD]	hh eh d
+7	[BODY]	b aa dx iy
+8	[MCCOY]	m ax k oy
+9	[FIVE]	f ay v
+9	[FOUR]	f ao r
+9	[NINE]	n ay n
+9	[EIGHT]	ey t
+9	[OH]	ow
+9	[ONE]	w ah n
+9	[SEVEN]	s eh v ax n
+9	[SIX]	s ih k s
+9	[THREE]	th r iy
+9	[TWO]	t uw
+9	[ZERO]	z ih r ow
+10	[DEGREE]	d ix g r iy
+10	[FEET]	f iy t
+10	[FOOT]	f uh t
+10	[INCH]	ih n ch
+11	[THIRTY]	th er dx iy
+11	[FORTY]	f ao r dx iy
+11	[SIXTY]	s ih k s t iy
+11	[EIGHTY]	ey dx iy
+11	[NINETY]	n ay n t iy
+12	[HUNDRED]	hh ah n d r ax d
+13	[FULL]	f uh l
+13	[HALF]	hh ae f
+13	[HALFWAY]	hh ae f w ey
+13	[QUARTER]	k w ao r dx er
+13	[SLIGHTLY]	s l ay t l iy
+13	[SLIGHT]	s l ay t
