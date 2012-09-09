@@ -23,10 +23,27 @@
 
 # Customizable parameters section -------------------------------------------------------------------------------------------------
 
+#include custom.makefile
+#include config.makefile
+
+
 # SDK version
 #SDKVER = ARDrone_SDK_Version_1_8_20110726/
 #SDKVER = ARDrone_SDK_2_0/
 SDKVER = ARDrone_SDK_2_0
+
+#CFLAGS = "-DUSE_LINUX=yes -DFFMPEG_SUPPORT=yes"
+#CFLAGS = "-DUSE_LINUX=yes FFMPEG_SUPPORT=yes"
+#CFLAGS = "-FFMPEG_SUPPORT=yes USE_LINUX=yes"
+#CFLAGS = -DFFMPEG_SUPPORT=yes -DUSE_LINUX=yes
+#CFLAGS = "-D FFMPEG_SUPPORT=yes -D USE_LINUX=yes"
+#CFLAGS = -DUSE_LINUX=yes 
+
+#CFLAGS += -DUSE_LINUX=yes 
+#CFLAGS += -DFFMPEG_SUPPORT=yes 
+#CFLAGS += -DUSE_FFMPEG=yes 
+
+#FFMPEG_SUPPORT=yes
 
 # This should be where you put the version above
 #TOP = $(HOME)/$(SDKVER)
@@ -73,10 +90,10 @@ EXTRA_LIB = $(pkg-config --cflags --libs opencv) -lpthread
 # --------------------------------------------------------------------------------------------------------------------------------
 #
 # Compiler component of ARDroneLib build path
-GCC_VERSION=$(shell $(GENERIC_COMMAND_PREFIX)gcc -v 2>&1 | \
-            grep --color=never version | grep -v [cC]onfigur | \
-            sed -e "s/\(^version gcc \)\([^ ]*\)\(.*\)/\2/" | \
-            sed -e "s/\(^gcc version \)\([^ ]*\)\(.*\)/\2/")
+#GCC_VERSION=$(shell $(GENERIC_COMMAND_PREFIX)gcc -v 2>&1 | \
+#            grep --color=never version | grep -v [cC]onfigur | \
+#            sed -e "s/\(^version gcc \)\([^ ]*\)\(.*\)/\2/" | \
+#            sed -e "s/\(^gcc version \)\([^ ]*\)\(.*\)/\2/")
 
 # OS component of ARDroneLib build path
 OS_TARGET_ID = $(shell uname -sor | sed -e "s/[ \/]/_/g")
@@ -98,7 +115,13 @@ INC = -I$(DIR) -I$(SDK) -I$(SDK)/VP_Os/linux -I$(SFT)/Lib -I$(SFT)/Common
 
 # Debug compilation
 #CC = gcc -Wall --enable-checking -g -O0 -v -da -Q
-CC = gcc -Wall -g -O0 -v -da -Q
+#CC = gcc -Wall -g -O0 -v -da -Q -DUSE_LINUX=yes
+
+#CC = gcc -Wall -g -O0 -v -da -Q $(CFLAGS) 
+#CC = gcc -Wall -g -O0 -v -da -Q -DUSE_LINUX=yes -DFFMPEG_SUPPORT=yes -DUSE_FFMPEG=yes $(CFLAGS) 
+CC = gcc -Wall -g -O0 -v -da -Q -DUSE_LINUX=yes $(CFLAGS) 
+
+#gcc -DIT_WORKED=yes -DFFMPEG_SUPPORT hello.c
 
 # Project name
 ALL = autopilot

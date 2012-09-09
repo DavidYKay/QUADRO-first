@@ -25,10 +25,15 @@ autopilot.c - ardrone_tool custom code for AR.Drone autopilot agent.
 
 #include <stdio.h>
 
+// TODO: Fix this hack
+#ifndef FFMPEG_SUPPORT
+#define FFMPEG_SUPPORT
+#endif
+
+
 //ARDroneLib
 //#include <ardrone_tool/ardrone_time.h>
 #include <utils/ardrone_time.h>
-#include <ardrone_tool/Navdata/ardrone_navdata_client.h>
 #include <ardrone_tool/Control/ardrone_control.h>
 #include <ardrone_tool/UI/ardrone_input.h>
 
@@ -43,12 +48,16 @@ autopilot.c - ardrone_tool custom code for AR.Drone autopilot agent.
 #include <VP_Os/vp_os_signal.h>
 #include <VP_Os/vp_os_types.h>
 
+#include <ardrone_tool/Navdata/ardrone_navdata_client.h>
+
 //Local project
 #define _MAIN
 #include "autopilot.h"
 #include "agent.h"
 
 #define PORT 40000
+
+//#define FFMPEG_SUPPORT yes
 
 PROTO_THREAD_ROUTINE(video_stage, data);
 
@@ -57,7 +66,18 @@ extern input_device_t gamepad;
 /* Implementing Custom methods for the main function of an ARDrone application */
 int main(int argc, char** argv)
 {
-	return ardrone_tool_main(argc, argv);
+
+#ifndef USE_LINUX
+        PRINT("autopilot.c: USE_LINUX not defined!\n");
+	return -1;
+#else
+#ifndef FFMPEG_SUPPORT
+        printf("autopilot.c: FFMPEG not included! \n");
+        exit (-1);
+#else
+    	return ardrone_tool_main(argc, argv);
+    #endif
+#endif
 }
 
 /* The delegate object calls this method during initialization of an ARDrone application */
